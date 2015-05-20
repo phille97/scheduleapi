@@ -1,5 +1,8 @@
 # scheduleapi-server
-
+*Someday there will be descriptive text here about this project.*
+##### [API documentation](https://github.com/phille97/scheduleapi-server/blob/master/API_doc.md)
+<hr>
+## How to install and run the server
 #### Install dependencies on Ubuntu
 `sudo apt-get install git python python-setuptools `
 #### Install dependencies on Mac 
@@ -10,7 +13,7 @@
 
 ### How to install on Mac and Linux
 Make sure you have Python, git, pip installed on you computer
-```
+```bash
 # Clone the git repo
 git clone https://github.com/phille97/scheduleapi.git
 # Go into the project
