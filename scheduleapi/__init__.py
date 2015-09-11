@@ -1,4 +1,3 @@
-#!flask/bin/python
 #
 # Simple schedule API
 #
@@ -15,7 +14,3 @@ app = Flask(__name__)
 @app.route('/')
 def render_webpage():
     return 'Hello World'
-
-# Gogogo!!!
-if __name__ == '__main__':
-    app.run()

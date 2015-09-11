@@ -1,0 +1,12 @@
+Database:
+    # This can be either PostgreSQL, MySQL or SQLite
+    Type: sqlite
+    
+    # SQLite
+    SQLitePath: :memory:
+
+    # PostgreSQL and MySQL
+    Database: localhost:5432
+    Host: scheduledb
+    Username: postgres
+    Password: postgres
