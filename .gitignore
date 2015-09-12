@@ -3,6 +3,8 @@
 #####=== Project Specific ===#####
 /config
 /bower_components
+scheduleapi/static/js/
+scheduleapi/static/css/
 
 #####=== Python ===#####
 

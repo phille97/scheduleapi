@@ -22,11 +22,11 @@ cd scheduleapi
 sudo easy_install virtualenv
 virtualenv venv
 . venv/bin/activate 
-# Install Flask
-pip install Flask
+# Install dependencies
+python setup.py install
 
 ```
-Then you can run it by typing `python app.py`
+Then you can run it by typing `python runserver.py`
 ### How to install on Windows
 1. Turn off computer
 2. Go outside
