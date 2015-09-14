@@ -28,6 +28,7 @@ setup(
     install_requires=[
         'Flask',
         'Flask-Security',
+        'Flask-Bootstrap',
         'PyYAML',
         'pony',
     ]

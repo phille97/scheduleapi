@@ -1,0 +1,38 @@
+{% extends "bootstrap/base.html" %}
+
+{% block html_attribs %} lang="en"{% endblock %}
+
+{% block navbar %}
+<nav class="navbar navbar-default">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <a class="navbar-brand" href="#">Schedule API</a>
+    </div>
+    <div>
+      <ul class="nav navbar-nav">
+        <li><a href="{{url_for('generic.serve_frontpage')}}">Home</a></li>
+        <li><a href="#">About</a></li>
+        <li><a href="https://github.com/phille97/scheduleapi-server/blob/master/API_doc.md">API Documentation <span class="glyphicon glyphicon-new-window" aria-hidden="true"></span></a></li> 
+        <li><a href="https://github.com/phille97/scheduleapi-server/issues">Support <span class="glyphicon glyphicon-new-window" aria-hidden="true"></span></a></li> 
+      </ul>
+    </div>
+    <div>
+      <ul class="nav navbar-nav pull-right">
+        <li><a href="#">Login</a></li> 
+        <li><a href="#">Register</a></li> 
+      </ul>
+    </div>
+  </div>
+</nav>
+{% endblock %}
+
+{% block styles %}
+{{super()}}
+<link rel="stylesheet"
+      href="{{url_for('static', filename='css/main.min.css')}}">
+{% endblock %}
+
+{% block scripts %}
+<script src="{{url_for('static', filename='js/main.min.js')}}"></script>
+{{super()}}
+{% endblock %}
