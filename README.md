@@ -1,4 +1,6 @@
-# scheduleapi-server
+# scheduleapi-server [![Build Status](https://drone.io/github.com/phille97/scheduleapi-server/status.png)](https://drone.io/github.com/phille97/scheduleapi-server/latest)
+
+
 *Someday there will be descriptive text here about this project.*
 ##### [API documentation](https://github.com/phille97/scheduleapi-server/blob/master/API_doc.md)
 <hr>
