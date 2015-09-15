@@ -15,3 +15,10 @@ def serve_frontpage():
         return render_template('index.html')
     except TemplateNotFound:
         abort(404)
+
+@bp.route('/about')
+def serve_aboutpage():
+    try:
+        return render_template('about.html')
+    except TemplateNotFound:
+        abort(404)

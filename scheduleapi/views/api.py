@@ -7,4 +7,4 @@ from flask import (
 from jinja2 import TemplateNotFound
 
 
-bp = Blueprint('api', __name__, url_prefix='/api')
+bp = Blueprint('api', __name__, url_prefix='/api/v1')

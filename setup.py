@@ -29,6 +29,9 @@ setup(
         'Flask',
         'Flask-Security',
         'Flask-Bootstrap',
+        'Flask-Babel',
+        'Flask-WTF',
+        'WTForms',
         'PyYAML',
         'pony',
     ]
