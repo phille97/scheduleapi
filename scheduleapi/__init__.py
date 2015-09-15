@@ -11,6 +11,7 @@ import time
 import yaml
 from flask import Flask, jsonify, send_from_directory, request
 from flask_bootstrap import Bootstrap
+from flask_restful import Api
 
 from scheduleapi.views.generic import bp as generic_view
 from scheduleapi.views.useractions import bp as useraction_view
@@ -31,9 +32,9 @@ app.config['BUNDLE_ERRORS'] = True
 Bootstrap(app)
 
 # API v1
-from scheduleapi.views.api import bp as api_v1
+api_v1 = Api(app, catch_all_404s=True)
+from scheduleapi.views.api import api as api_v1
 
 ## Load and register blueprints
 app.register_blueprint(generic_view)
-app.register_blueprint(api_view)
 app.register_blueprint(useraction_view)

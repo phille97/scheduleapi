@@ -31,6 +31,7 @@ setup(
         'Flask-Bootstrap',
         'Flask-Babel',
         'Flask-WTF',
+        'flask_restful',
         'WTForms',
         'PyYAML',
         'pony',

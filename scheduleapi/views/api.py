@@ -1,12 +1,8 @@
 # -*- coding: utf-8 -*-
 
-from flask import (
-    current_app
-    )
 from flask_restful import reqparse, abort, Api, Resource
 
-
-api = Api(current_app, catch_all_404s=True)
+from .. import api_v1 as api
 
 errors = {
     'ResourceDoesNotExist': {
@@ -26,6 +22,7 @@ class Calendar(Resource):
     def put(self, calendar_id):
         return 'Not implemented!', 501
 
+
 class CalendarList(Resource):
     def get(self):
         return 'Not implemented!', 501
@@ -44,12 +41,14 @@ class Event(Resource):
     def put(self, event_id):
         return 'Not implemented!', 501
 
+
 class EventList(Resource):
-    def get(self):
+    def get(self, calendar_id):
         return 'Not implemented!', 501
 
-    def post(self):
+    def post(self, calendar_id):
         return 'Not implemented!', 501
+
 
 class Occasion(Resource):
     def get(self, occasion_id):
@@ -60,6 +59,7 @@ class Occasion(Resource):
 
     def put(self, occasion_id):
         return 'Not implemented!', 501
+
 
 class OccasionList(Resource):
     def get(self, event_id):
@@ -75,6 +75,6 @@ api.add_resource(Calendar, '/calendars/<calendar_id>')
 api.add_resource(EventList, '/events')
 api.add_resource(Event, '/events/<event_id>')
 
-api.add_resource(EventList, '/events/<event_id>/occasions')
-api.add_resource(Event, '/events/<event_id>/occasions/<occasion_id>')
+api.add_resource(OccasionList, '/events/<event_id>/occasions')
+api.add_resource(Occasion, '/events/<event_id>/occasions/<occasion_id>')
 
