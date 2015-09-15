@@ -26,7 +26,9 @@ setup(
         "License :: OSI Approved :: MIT License",
     ],
     install_requires=[
+        'flask',
         'Flask',
+        'Flask-SQLAlchemy',
         'Flask-Security',
         'Flask-Bootstrap',
         'Flask-Babel',
@@ -34,6 +36,5 @@ setup(
         'flask_restful',
         'WTForms',
         'PyYAML',
-        'pony',
     ]
 )

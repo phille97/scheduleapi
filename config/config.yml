@@ -5,7 +5,7 @@ database:
     sqlite:
         path: ":memory:"
 
-    database: localhost:5432
-    host: scheduledb
+    database: scheduledb
+    host: localhost:5432
     username: postgres
     password: postgres

@@ -6,7 +6,16 @@
 <hr>
 ## How to install and run the server
 #### Install dependencies on Ubuntu
-`sudo apt-get install git python python-setuptools `
+```bash
+sudo apt-get update
+sudo apt-get install git python python-setuptools nodejs npm
+```
+
+#### Install dependencies on Arch Linux
+```bash
+sudo pacman -Sy git python python-setuptools nodejs npm
+```
+
 #### Install dependencies on Mac 
 1. [Install XCode](http://developer.apple.com/xcode/)
 2. `ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)" `

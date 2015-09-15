@@ -1,41 +1,34 @@
 # -*- coding: utf-8 -*-
 
 from flask_wtf import Form
-from wtforms import StringField
+from wtforms import StringField, PasswordField, BooleanField
 from wtforms.validators import Required, Optional, Email
 
 
 class Login(Form):
     username = StringField('Username', validators=[
-        Required(
-            message='Please choose a username'
-        ),
+        Required(message='Please pick a username'),
         Length(
-            min=2,
-            max=25,
+            min=2, max=25,
             message='Username needs to be between 2 and 25 characters'
         )
     ])
-    password = StringField('Password', validators=[
-        Required(
-            message='Please choose a password'
-        ),
+    password = PasswordField('Password', validators=[
+        Required(message='Please choose a password'),
         Length(
-            min=5,
-            max=50,
+            min=5, max=50,
             message='Password needs to be between 5 and 50 characters'
         )
     ])
+    remember_me = BooleanField('remember_me', default = False)
 
 class Register(Form):
     username = StringField('Username', validators=[
         Required(message='Please type your username')
     ])
-    password = StringField('Password', validators=[
+    password = PasswordField('Password', validators=[
         Required(message='Please type your password')
     ])
     email = StringField('Email', validators=[
-        Email(
-            Required(message='Email is not valid')
-        ), Optional()
+        Email(message='Email is not valid'), Optional()
     ])
