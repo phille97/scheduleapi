@@ -1,4 +1,4 @@
-# scheduleapi-server [![Build Status](https://drone.io/github.com/phille97/scheduleapi-server/status.png?skip_githubcache=123)](https://drone.io/github.com/phille97/scheduleapi-server/latest)
+# scheduleapi-server [![Build Status](https://travis-ci.org/phille97/scheduleapi-server.svg?branch=master)](https://travis-ci.org/phille97/scheduleapi-server)
 
 
 *Someday there will be descriptive text here about this project.*
