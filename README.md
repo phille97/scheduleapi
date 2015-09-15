@@ -11,7 +11,7 @@
 1. [Install XCode](http://developer.apple.com/xcode/)
 2. `ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)" `
 3. Add homebrew to your PATH (eg. `export PATH=/usr/local/bin:/usr/local/sbin:$PATH`)
-4. `brew install python`
+4. `brew install python node`
 
 ### How to install on Mac and Linux
 Make sure you have Python, git, pip installed on you computer
@@ -26,7 +26,9 @@ virtualenv venv
 . venv/bin/activate 
 # Install dependencies
 python setup.py install
-
+npm install
+# Generate static files
+grunt
 ```
 Then you can run it by typing `python runserver.py`
 ### How to install on Windows
