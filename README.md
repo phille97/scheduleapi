@@ -2,7 +2,7 @@
 
 
 *Someday there will be descriptive text here about this project.*
-##### [API documentation](https://github.com/phille97/scheduleapi-server/blob/master/API_doc.md)
+##### [API documentation](https://github.com/phille97/scheduleapi-server/blob/master/api_doc.md)
 <hr>
 ## How to install and run the server
 #### Install dependencies on Ubuntu

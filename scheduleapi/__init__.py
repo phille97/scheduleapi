@@ -14,7 +14,6 @@ from flask_bootstrap import Bootstrap
 
 from scheduleapi.views.generic import bp as generic_view
 from scheduleapi.views.useractions import bp as useraction_view
-from scheduleapi.views.api import bp as api_view
 
 
 ## Load config
@@ -26,9 +25,13 @@ from .database.db import db
 
 # Create and setup Flask
 app = Flask(__name__)
+app.config['BUNDLE_ERRORS'] = True
 
 # Cuz i don't give a fak
 Bootstrap(app)
+
+# API v1
+from scheduleapi.views.api import bp as api_v1
 
 ## Load and register blueprints
 app.register_blueprint(generic_view)
