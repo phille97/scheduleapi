@@ -6,20 +6,24 @@ from flask import (
     )
 from jinja2 import TemplateNotFound
 
+from ..forms.useractions import Login as LoginForm, Register as RegisterForm
+
 
 bp = Blueprint('useractions', __name__, url_prefix='/usr')
 
 @bp.route('/login', methods=['GET'])
 def get_login():
+    form = LoginForm()
     try:
-        return render_template('forms/login.html')
+        return render_template('forms/login.html', form=form)
     except TemplateNotFound:
         abort(404)
 
 @bp.route('/register', methods=['GET'])
 def get_register():
+    form = RegisterForm()
     try:
-        return render_template('forms/register.html')
+        return render_template('forms/register.html', form=form)
     except TemplateNotFound:
         abort(404)
 

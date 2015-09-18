@@ -10,3 +10,8 @@ database:
     host: localhost:5432
     username: postgres
     password: postgres
+
+flask:
+    host: 127.0.0.1
+    port: 5000
+    secret_key: "change me"

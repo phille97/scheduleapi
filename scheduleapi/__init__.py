@@ -1,4 +1,4 @@
- # -*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 #
 # Simple schedule API
 #
@@ -24,6 +24,7 @@ from scheduleapi.resources.calendar import (
 ## Load config
 config = yaml.load(open('config/config.yml', 'r'))
 db_config = config["database"]
+flask_config = config["flask"]
 
 
 ## Setup database
@@ -32,6 +33,7 @@ from .database.db import db
 
 ## Create and setup Flask
 app = Flask(__name__)
+app.config['SECRET_KEY'] = flask_config['secret_key']
 # Cuz I don't give a fak
 Bootstrap(app)
 

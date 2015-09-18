@@ -2,6 +2,7 @@
 
 import datetime
 
+from flask.ext.sqlalchemy import SQLAlchemy
 from sqlalchemy import (
     create_engine, Sequence, Table, MetaData, Column, Integer, String, Boolean,
     Float, Text, ForeignKey, DateTime, UniqueConstraint
@@ -97,6 +98,7 @@ user_preference = Table('user_preference', Base.metadata,
 class User(Base, Mixin, UserMixin):
     username = Column(String, unique=True, nullable=False)
     password = Column(String, nullable=False)
+    active = Column(Boolean, default=True)
 
     roles = relationship('Role', secondary=users_roles,
         backref=backref('user', lazy='joined'), lazy='dynamic')
@@ -109,6 +111,14 @@ class User(Base, Mixin, UserMixin):
     emails = relationship('Email', backref='user')
     apikeys = relationship('Apikey', backref='user')
 
+    def __init__(self, username, password):
+        self.username = username
+        self.password = password
+        return self
+
+    def __repr__(self):
+        return '<User %r>' % self.username
+
 
 class Role(Base, Mixin, RoleMixin):
     name = Column(String, unique=True)
@@ -116,6 +126,9 @@ class Role(Base, Mixin, RoleMixin):
 
     users = relationship('User', secondary=users_roles,
         backref=backref('group', lazy='dynamic'))
+
+    def __repr__(self):
+        return '<Role %r>' % self.name
 
 
 class Group(Base, Mixin):
@@ -125,6 +138,9 @@ class Group(Base, Mixin):
         backref=backref('group', lazy='dynamic'))
     calendars = relationship('Calendar', secondary=groups_calendars,
         backref=backref('group', lazy='dynamic'))
+
+    def __repr__(self):
+        return '<Group %r>' % self.name
 
 
 class Calendar(Base, Mixin):
@@ -138,6 +154,9 @@ class Calendar(Base, Mixin):
         backref=backref('user', lazy='dynamic'))
     events = relationship('Event', backref='calendar')
 
+    def __repr__(self):
+        return '<Calendar %r>' % self.id
+
 
 class Event(Base, Mixin):
     name = Column(String, nullable=True)
@@ -150,11 +169,16 @@ class Event(Base, Mixin):
     occasions = relationship('Occasion', backref='event')
     locations = relationship('Location', backref='event')
 
+    def __repr__(self):
+        return '<Event %r>' % self.id
 
 class Occasion(Base, Mixin):
     start = Column(DateTime, nullable=False)
     end = Column(DateTime, nullable=False)
     event_id = Column(Integer, ForeignKey('event.id'))
+
+    def __repr__(self):
+        return '<Occasion %r>' % self.id
 
 
 class Location(Base, Mixin):
@@ -163,13 +187,23 @@ class Location(Base, Mixin):
     name = Column(String, nullable=True)
     event_id = Column(Integer, ForeignKey('event.id'))
 
+    def __repr__(self):
+        return '<Location id={id}, long={id}, lat={id}>'.format(
+            id=self.id,
+            long=self.longitude,
+            lat=self.latitude
+        )
+
 
 class Email(Base, Mixin):
-    address = Column(String, nullable=True)
-    primary = Column(Boolean, nullable=True)
+    address = Column(String, nullable=False)
+    primary = Column(Boolean, default=False)
     user_id = Column(Integer, ForeignKey('user.id'))
 
     UniqueConstraint('address')
+
+    def __repr__(self):
+        return '<Email %r>' % self.address
 
 
 class Apikey(Base, Mixin):
@@ -179,6 +213,9 @@ class Apikey(Base, Mixin):
     user_id = Column(Integer, ForeignKey('user.id'))
 
     UniqueConstraint('keyid')
+
+    def __repr__(self):
+        return '<Apikey %r>' % self.keyid
 
 
 class Attachment(Base, Mixin):
@@ -192,6 +229,12 @@ class Attachment(Base, Mixin):
 
     UniqueConstraint('upload_path')
 
+    def __repr__(self):
+        return '<Attachment id={id}, path={path}>'.format(
+            id=self.id,
+            path=self.upload_path
+        )
+
 
 class Tag(Base, Mixin):
     name = Column(String, nullable=False)
@@ -199,4 +242,7 @@ class Tag(Base, Mixin):
 
     events = relationship('Event', secondary=events_tags,
         backref=backref('tag', lazy='dynamic'))
+
+    def __repr__(self):
+        return '<Tag %r>' % self.keyid
 
