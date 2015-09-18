@@ -3,8 +3,8 @@
 import datetime
 
 from sqlalchemy import (
-    Sequence, Table, MetaData, Column, Integer, String, Boolean, Float, Text,
-    ForeignKey, DateTime
+    create_engine, Sequence, Table, MetaData, Column, Integer, String, Boolean,
+    Float, Text, ForeignKey, DateTime, UniqueConstraint
     )
 from sqlalchemy.orm import (
     sessionmaker, mapper, relationship, backref, column_property
@@ -20,8 +20,8 @@ db_type = db_config['type']
 allowed_db_types = ['postgresql', 'mysql', 'sqlite']
 
 if db_type not in allowed_db_types:
-    raise ValueError("""Database type needs to be one of the following:
-        """ + ', '.join(allowed_db_types) + """. Check spelling in config!""")
+    raise ValueError("Database type needs to be one of the following:"
+        + ', '.join(allowed_db_types) + ". Check spelling in config!")
 
 if db_type == 'sqlite':
     DATABASE_URI = "{type}://{path}".format(
@@ -35,8 +35,9 @@ else:
         host = db_config['host'],
         db = db_config['database'])
 
-db = create_engine(DATABASE_URI,
-    pool_size=20, max_overflow=10)
+Base = declarative_base()
+
+db = create_engine(DATABASE_URI)
 
 Session = sessionmaker(bind=db)
 session = Session()
@@ -58,33 +59,36 @@ class Mixin(object):
 ##
 users_roles = Table('users_roles', Base.metadata,
     Column('user_id', Integer, ForeignKey('user.id')),
-    Column('role_id', Integer, ForeignKey('role.id'))# TODO
+    Column('role_id', Integer, ForeignKey('role.id'))
 )
 users_groups = Table('users_groups', Base.metadata,
     Column('user_id', Integer, ForeignKey('user.id')),
-    Column('group_id', Integer, ForeignKey('group.id'))# TODO
+    Column('group_id', Integer, ForeignKey('group.id'))
 )
 users_calendars = Table('users_calendars', Base.metadata,
     Column('user_id', Integer, ForeignKey('user.id')),
-    Column('role_id', Integer, ForeignKey('role.id'))# TODO
-)
-users_emails = Table('users_emails', Base.metadata,
-    Column('user_id', Integer, ForeignKey('user.id')),
-    Column('role_id', Integer, ForeignKey('role.id'))# TODO
-)
-users_apikeys = Table('users_apikeys', Base.metadata,
-    Column('user_id', Integer, ForeignKey('user.id')),
-    Column('role_id', Integer, ForeignKey('role.id'))# TODO
+    Column('calendar_id', Integer, ForeignKey('calendar.id'))
 )
 users_attatchments = Table('users_attatchments', Base.metadata,
     Column('user_id', Integer, ForeignKey('user.id')),
-    Column('role_id', Integer, ForeignKey('role.id'))# TODO
+    Column('attachment_id', Integer, ForeignKey('attachment.id'))
 )
 groups_calendars = Table('groups_calendars', Base.metadata,
     Column('group_id', Integer, ForeignKey('group.id')),
-    Column('role_id', Integer, ForeignKey('role.id'))# TODO
+    Column('calendar_id', Integer, ForeignKey('calendar.id'))
 )
-# TODO: MOAR OF DIS
+events_tags = Table('events_tags', Base.metadata,
+    Column('event_id', Integer, ForeignKey('event.id')),
+    Column('tag_id', Integer, ForeignKey('tag.id'))
+)
+
+
+user_preference = Table('user_preference', Base.metadata,
+    Column('pref_id', Integer, primary_key=True),
+    Column('user_id', Integer, ForeignKey("user.id"), nullable=False),
+    Column('pref_name', String(40), nullable=False),
+    Column('pref_value', String(100))
+)
 
 
 ##
@@ -98,116 +102,101 @@ class User(Base, Mixin, UserMixin):
         backref=backref('user', lazy='joined'), lazy='dynamic')
     groups = relationship('Group', secondary=users_groups,
         backref=backref('user', lazy='joined'), lazy='dynamic')
-    emails = relationship('Email', secondary=users_emails,
-        backref=backref('user', lazy='joined'), lazy='dynamic', cascade="all, delete-orphan")
-    apikeys = relationship('Apikey', secondary=users_apikeys,
-        backref=backref('user', lazy='joined'), lazy='dynamic', cascade="all, delete-orphan")
     calendars = relationship('Calendar', secondary=users_calendars,
         backref=backref('user', lazy='dynamic'))
     attatchments = relationship('Attachment', secondary=users_attatchments,
         backref=backref('user', lazy='dynamic'))
-
-    def getOccasions(start, end):
-        pass
+    emails = relationship('Email', backref='user')
+    apikeys = relationship('Apikey', backref='user')
 
 
 class Role(Base, Mixin, RoleMixin):
     name = Column(String, unique=True)
     description = Column(String)
 
+    users = relationship('User', secondary=users_roles,
+        backref=backref('group', lazy='dynamic'))
+
 
 class Group(Base, Mixin):
-    username = Column(String, unique=True, nullable=False)
+    name = Column(String, unique=True, nullable=False)
 
+    users = relationship('User', secondary=users_groups,
+        backref=backref('group', lazy='dynamic'))
     calendars = relationship('Calendar', secondary=groups_calendars,
+        backref=backref('group', lazy='dynamic'))
+
+
+class Calendar(Base, Mixin):
+    name = Column(String, nullable=True)
+    description = Column(Text,  nullable=True)
+    color = Column(String,  nullable=True)
+
+    users = relationship('User', secondary=users_groups,
+        backref=backref('calendar', lazy='dynamic'))
+    groups = relationship('Group', secondary=groups_calendars,
         backref=backref('user', lazy='dynamic'))
+    events = relationship('Event', backref='calendar')
 
 
-class Calendar(db.Entity):
-    id = PrimaryKey(int, auto=True)
-    name = Optional(str)
-    description = Optional(LongStr, lazy=True)
-    color = Optional(str, nullable=True)
+class Event(Base, Mixin):
+    name = Column(String, nullable=True)
+    description = Column(Text, nullable=True)
+    calendar_id = Column(Integer, ForeignKey('calendar.id'))
 
-    users = Set("User")
-    groups = Set("Group")
-    events = Set("Event", cascade_delete=True)
-
-    def getNextOccasion():
-        pass
-
-    def getOccasions(start, end):
-        pass
-
-class Event(db.Entity):
-    id = PrimaryKey(int, auto=True)
-    name = Required(str)
-    description = Optional(LongStr, lazy=True)
-
-    location = Optional("Location")
-    calendar = Required("Calendar")
-    attachments = Set("Attachment")
-    tags = Set("Tag")
-    occasions = Set("Occasion", cascade_delete=True)
-
-    def getNextOccasion():
-        pass
-
-    def getOccasions(start, end):
-        pass
+    attachments = relationship('Attachment', backref='event')
+    tags = relationship('Tag', secondary=events_tags,
+        backref=backref('event', lazy='dynamic'))
+    occasions = relationship('Occasion', backref='event')
+    locations = relationship('Location', backref='event')
 
 
-class Occasion(db.Entity):
-    id = PrimaryKey(int, auto=True)
-    start = Required(datetime)
-    end = Required(datetime)
-
-    event = Required(Event)
+class Occasion(Base, Mixin):
+    start = Column(DateTime, nullable=False)
+    end = Column(DateTime, nullable=False)
+    event_id = Column(Integer, ForeignKey('event.id'))
 
 
-class Location(db.Entity):
-    id = PrimaryKey(int, auto=True)
-    latitude = Optional(Decimal)
-    longitude = Optional(Decimal)
-    name = Required(str, nullable=True)
-
-    event = Required(Event)
+class Location(Base, Mixin):
+    latitude = Column(Float, nullable=True)
+    longitude = Column(Float, nullable=True)
+    name = Column(String, nullable=True)
+    event_id = Column(Integer, ForeignKey('event.id'))
 
 
-class Email(db.Entity):
-    id = PrimaryKey(int, auto=True)
-    address = Required(str, unique=True)
-    primary = Optional(bool, default=False)
+class Email(Base, Mixin):
+    address = Column(String, nullable=True)
+    primary = Column(Boolean, nullable=True)
+    user_id = Column(Integer, ForeignKey('user.id'))
 
-    user = Required(User)
-
-
-class Apikey(db.Entity):
-    id = PrimaryKey(int, auto=True)
-    keyid = Required(UUID, unique=True)
-    keypass = Required(str)
-    hits = Required(int, default=0)
-
-    user = Required(User)
+    UniqueConstraint('address')
 
 
-class Attachment(db.Entity):
-    id = PrimaryKey(int, auto=True)
-    upload_path = Required(str, unique=True)
-    mime_type = Optional(str)
-    size = Required(int)
+class Apikey(Base, Mixin):
+    keyid = Column(String, nullable=False)
+    keypass = Column(String, nullable=False)
+    hits = Column(Integer, default=0)
+    user_id = Column(Integer, ForeignKey('user.id'))
 
-    event = Optional(Event)
-    user = Optional(User)
-
-
-class Tag(db.Entity):
-    id = PrimaryKey(int, auto=True)
-    name = Required(str)
-    color = Optional(str, nullable=True)
-
-    events = Set(Event)
+    UniqueConstraint('keyid')
 
 
-#sql_debug(True)
-db.generate_mapping(create_tables=True)
+class Attachment(Base, Mixin):
+    upload_path = Column(String, nullable=False)
+    mime_type = Column(String, nullable=False)
+    size = Column(Integer, nullable=False)
+    event_id = Column(Integer, ForeignKey('event.id'))
+
+    users = relationship('User', secondary=users_attatchments,
+        backref=backref('attachment', lazy='dynamic'))
+
+    UniqueConstraint('upload_path')
+
+
+class Tag(Base, Mixin):
+    name = Column(String, nullable=False)
+    color = Column(String, nullable=True)
+
+    events = relationship('Event', secondary=events_tags,
+        backref=backref('tag', lazy='dynamic'))
+

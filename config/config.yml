@@ -3,7 +3,8 @@ database:
     type: sqlite
 
     sqlite:
-        path: ":memory:"
+        # Leave this empty for non-persistent storage
+        path: ""
 
     database: scheduledb
     host: localhost:5432
