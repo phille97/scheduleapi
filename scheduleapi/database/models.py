@@ -70,7 +70,7 @@ user_preference = Table('user_preference', Base.metadata,
 class User(Base, Mixin, UserMixin):
     username = Column(String, unique=True, nullable=False)
     password = Column(String, nullable=False)
-    active = Column(Boolean, default=True)
+    authenticated = Column(Boolean, default=False)
 
     roles = relationship('Role', secondary=users_roles,
         backref=backref('user', lazy='joined'), lazy='dynamic')
@@ -84,13 +84,7 @@ class User(Base, Mixin, UserMixin):
     apikeys = relationship('Apikey', backref='user')
 
     def is_active(self):
-        return self.active
-
-    def is_anonymous():
-        return False
-
-    def get_id(self):
-        return self.id
+        return True
 
     def __init__(self, username, password):
         self.username = username
@@ -181,6 +175,10 @@ class Email(Base, Mixin):
     user_id = Column(Integer, ForeignKey('user.id'))
 
     UniqueConstraint('address')
+
+    def __init__(self, address, primary=False):
+        self.address = address
+        self.primary = primary
 
     def __repr__(self):
         return '<Email %r>' % self.address

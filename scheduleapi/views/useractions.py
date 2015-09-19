@@ -1,16 +1,16 @@
 # -*- coding: utf-8 -*-
 
+import flask
 from flask import (
     Blueprint, render_template, abort, flash, session, request,
     redirect, url_for
     )
-from flask.ext.login import login_user
+from flask.ext.login import login_user, logout_user
 from jinja2 import TemplateNotFound
 
 from ..forms.useractions import Login as LoginForm, Register as RegisterForm
-from ..controllers.users import (
-    login as do_login, register as do_register, logout as do_logout
-    )
+from ..controllers.users import register as do_register, encrypt_password, check_password
+from ..controllers.database import get_session
 from ..database.models import User
 
 
@@ -21,9 +21,15 @@ bp = Blueprint('useractions', __name__, url_prefix='/usr')
 def login():
     form = LoginForm(request.form)
     if request.method == 'POST' and form.validate():
-        if login_user(User(form.data['username'], form.data['password'])):
-            flash("You are now logged in!")
-            return redirect(url_for('generic.serve_frontpage'))
+        session = get_session()
+        user = session.query(User).filter(User.username==form.username.data).first()
+        if user:
+            if check_password(form.password.data, user.password):
+                user.authenticated = True
+                session.add(user)
+                session.commit()
+                login_user(user, remember=form.remember_me.data)
+                return redirect(url_for('generic.serve_frontpage'))
         else:
             flash("Invalid credentials!")
     try:
@@ -47,4 +53,5 @@ def register():
 
 @bp.route('/logout', methods=['GET'])
 def logout():
-    abort(501)
+    logout_user()
+    return redirect(url_for('generic.serve_frontpage'))

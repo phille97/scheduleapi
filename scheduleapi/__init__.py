@@ -44,8 +44,8 @@ login_manager.login_message = u"You are now logged in!"
 login_manager.login_view = "useractions.login"
 
 @login_manager.user_loader
-def load_user(user_id):
-    return session.query(User).filter(id=user_id)
+def user_loader(user_id):
+    return session.query(User).filter(User.id==user_id).first()
 
 ## API Blueprint
 api_bp = Blueprint('api', __name__, url_prefix='/api')

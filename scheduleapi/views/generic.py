@@ -22,3 +22,18 @@ def serve_aboutpage():
         return render_template('about.html')
     except TemplateNotFound:
         abort(404)
+
+@bp.route('/settings', methods=['GET'])
+def get_settings():
+    try:
+        return render_template('settings.html')
+    except TemplateNotFound:
+        abort(404)
+
+@bp.route('/settings', methods=['POST'])
+def post_settings():
+    try:
+        return render_template('settings.html')
+    except TemplateNotFound:
+        abort(404)
+

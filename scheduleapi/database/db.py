@@ -44,3 +44,4 @@ session = Session()
 from .models import Base
 
 Base.metadata.create_all(db)
+#Base.metadata.drop_all(db)

@@ -38,5 +38,6 @@ setup(
         'WTForms',
         'PyYAML',
         'psycopg2',
+        'passlib',
     ]
 )
