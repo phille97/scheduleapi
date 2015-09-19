@@ -1,8 +1,7 @@
 #### joe made this: https://goel.io/joe
 
 #####=== Project Specific ===#####
-/config
-/bower_components
+config/config.yml
 scheduleapi/static/js/
 scheduleapi/static/css/
 

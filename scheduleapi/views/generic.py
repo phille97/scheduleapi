@@ -4,6 +4,7 @@ from flask import (
     Blueprint, render_template, abort, flash, session, request,
     redirect, url_for
     )
+from flask.ext.login import login_required
 from jinja2 import TemplateNotFound
 
 
@@ -16,6 +17,7 @@ def serve_frontpage():
     except TemplateNotFound:
         abort(404)
 
+
 @bp.route('/about')
 def serve_aboutpage():
     try:
@@ -23,14 +25,18 @@ def serve_aboutpage():
     except TemplateNotFound:
         abort(404)
 
+
 @bp.route('/settings', methods=['GET'])
+@login_required
 def get_settings():
     try:
         return render_template('settings.html')
     except TemplateNotFound:
         abort(404)
 
+
 @bp.route('/settings', methods=['POST'])
+@login_required
 def post_settings():
     try:
         return render_template('settings.html')

@@ -5,7 +5,7 @@ from flask import (
     Blueprint, render_template, abort, flash, session, request,
     redirect, url_for
     )
-from flask.ext.login import login_user, logout_user
+from flask.ext.login import login_user, logout_user, login_required
 from jinja2 import TemplateNotFound
 
 from ..forms.useractions import Login as LoginForm, Register as RegisterForm
@@ -37,6 +37,7 @@ def login():
     except TemplateNotFound:
         abort(404)
 
+
 @bp.route('/register', methods=['GET', 'POST'])
 def register():
     form = RegisterForm(request.form)
@@ -51,7 +52,9 @@ def register():
     except TemplateNotFound:
         abort(404)
 
+
 @bp.route('/logout', methods=['GET'])
+@login_required
 def logout():
     logout_user()
     return redirect(url_for('generic.serve_frontpage'))
