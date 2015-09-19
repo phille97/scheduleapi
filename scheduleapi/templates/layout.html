@@ -36,12 +36,14 @@
 </nav>
 {% with messages = get_flashed_messages() %}
   {% if messages %}
+    <div class="container">
     {% for message in messages %}
-      <div class="alert alert-warning alert-dismissible" role="alert">
+      <div class="container alert alert-warning alert-dismissible" role="alert">
         <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
         {{ message }}
       </div>
     {% endfor %}
+    </div>
   {% endif %}
 {% endwith %}
 {% endblock %}
@@ -53,6 +55,6 @@
 {% endblock %}
 
 {% block scripts %}
-<script src="{{url_for('static', filename='js/main.min.js')}}"></script>
 {{super()}}
+<script src="{{url_for('static', filename='js/main.min.js')}}"></script>
 {% endblock %}

@@ -11,7 +11,6 @@ bp = Blueprint('generic', __name__)
 
 @bp.route('/')
 def serve_frontpage():
-    flash('katt')
     try:
         return render_template('index.html')
     except TemplateNotFound:

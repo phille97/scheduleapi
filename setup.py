@@ -30,11 +30,13 @@ setup(
         'Flask',
         'Flask-SQLAlchemy',
         'Flask-Security',
+        'Flask-Login',
         'Flask-Bootstrap',
         'Flask-Babel',
         'Flask-WTF',
         'flask_restful',
         'WTForms',
         'PyYAML',
+        'psycopg2',
     ]
 )
