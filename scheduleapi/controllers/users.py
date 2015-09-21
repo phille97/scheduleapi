@@ -50,3 +50,6 @@ def remove_apikey(apikey):
         session.commit()
         return True
     return False
+
+def save_settings(form, user):
+    return None

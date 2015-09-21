@@ -8,6 +8,7 @@ from flask.ext.login import login_required, current_user
 from jinja2 import TemplateNotFound
 
 from ..database.models import Apikey
+from ..forms.useractions import UserSettings as UserSettingsForm
 from ..controllers.database import get_session
 from ..controllers.users import generate_apikey, fetch_apikeys, remove_apikey
 
@@ -30,22 +31,18 @@ def serve_aboutpage():
         abort(404)
 
 
-@bp.route('/settings', methods=['GET'])
+@bp.route('/settings', methods=['GET', 'POST'])
 @login_required
-def get_settings():
+def settings_yo():
+    form = UserSettingsForm(request.form)
+    if request.method == 'POST' and form.validate():
+        if save_settings(form):
+            pass
     try:
-        return render_template('settings.html')
+        return render_template('settings.html', form=form)
     except TemplateNotFound:
         abort(404)
 
-
-@bp.route('/settings', methods=['POST'])
-@login_required
-def post_settings():
-    try:
-        return render_template('settings.html')
-    except TemplateNotFound:
-        abort(404)
 
 @bp.route('/settings/apikeys', methods=['GET'])
 @login_required
@@ -61,7 +58,7 @@ def new_apikey():
     api_key = generate_apikey(user=current_user)
     return redirect(url_for('generic.get_apikeys'))
 
-@bp.route('/settings/apikeys/remove/<id>', methods=['GET'])
+@bp.route('/settings/apikeys/<id>/remove', methods=['GET'])
 @login_required
 def del_apikey(id):
     session = get_session()

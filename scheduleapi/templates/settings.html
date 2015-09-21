@@ -1,4 +1,7 @@
 {% extends "layout.html" %}
+
+{% from "_formhelpers.html" import render_field %}
+
 {% block title %}Configure ScheduleAPI{% endblock %}
 
 {% block content %}
@@ -7,6 +10,19 @@
   <hr>
   <a class="btn btn-lg btn-default" href="{{url_for('generic.get_apikeys')}}">Manage API keys</a>
   <hr>
-  <h2>User settings</h2>
+  <h2 class="col-sm-offset-2">User settings</h2>
+  <form class="form-horizontal" method="POST" action="{{url_for('generic.settings_yo')}}">
+      {{ form.hidden_tag() }}
+
+      {{ render_field(form.password) }}
+      {{ render_field(form.pwd_confirm) }}
+      {{ render_field(form.email) }}
+
+      <div class="form-group">
+        <div class="col-sm-offset-2 col-sm-10">
+          <button type="submit" class="btn btn-default">Save</button>
+        </div>
+      </div>
+    </form>
 </div>
 {% endblock %}

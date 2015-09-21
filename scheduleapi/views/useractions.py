@@ -37,11 +37,12 @@ def login():
     except TemplateNotFound:
         abort(404)
 
+# Matte finns inte
 
 @bp.route('/register', methods=['GET', 'POST'])
 def register():
     form = RegisterForm(request.form)
-    if request.method == 'POST' and  form.validate():
+    if request.method == 'POST' and form.validate():
         if do_register(form.data['username'], form.data['password'], form.data['email']):
             flash("Registered successfully. You may now login")
             return redirect(url_for('useractions.login'))

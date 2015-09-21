@@ -2,7 +2,7 @@
 
 from flask_wtf import Form
 from wtforms import StringField, PasswordField, BooleanField
-from wtforms.validators import Required, Optional, Length, Email
+from wtforms.validators import Required, Optional, Length, Email, EqualTo
 
 
 class Login(Form):
@@ -25,8 +25,25 @@ class Register(Form):
         Required(message='Please pick a password'),
         Length(min=5, max=50,
             message='Password needs to be between 5 and 50 characters'
-        )
+        ),
+        EqualTo('pwd_confirm', message='Passwords must match')
     ])
+    pwd_confirm = PasswordField('Repeat password')
     email = StringField('Email', validators=[
-        Email(message='Email is not valid'), Optional()
+        Optional(),
+        Email(message='Email is not valid')
+    ])
+
+class UserSettings(Register):
+    password = PasswordField('Password', validators=[
+        Optional(),
+        Length(min=5, max=50,
+            message='Password needs to be between 5 and 50 characters'
+        ),
+        EqualTo('pwd_confirm', message='Passwords must match')
+    ])
+    pwd_confirm = PasswordField('Repeat password')
+    email = StringField('Email', validators=[
+        Optional(),
+        Email(message='Email is not valid')
     ])
