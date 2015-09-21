@@ -39,5 +39,6 @@ setup(
         'PyYAML',
         'psycopg2',
         'passlib',
+        'urlparse',
     ]
 )

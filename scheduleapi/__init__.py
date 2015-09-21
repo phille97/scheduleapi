@@ -40,7 +40,7 @@ app.session = session
 ## LoginManager
 login_manager = LoginManager()
 login_manager.init_app(app)
-login_manager.login_message = u"You are now logged in!"
+login_manager.login_message = u"Please authenticate!"
 login_manager.login_view = "useractions.login"
 
 @login_manager.user_loader

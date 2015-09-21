@@ -1,0 +1,24 @@
+{% extends "layout.html" %}
+
+{% from "_formhelpers.html" import render_field %}
+
+{% block title %}Manage API keys ScheduleAPI{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1>API keys</h1> <a href="{{url_for('generic.new_apikey')}}" class="btn btn-default">Request new API key</a>
+    <hr>
+    <div class="table-responsive">
+      <table class="table table-striped table-condensed">
+        <thead>
+          <tr>
+            <td>ID</td> <td>Pass</td><td>Hits</td><td></td>
+          </tr>
+        </thead>
+      {% for apikey in apikeys %}
+          <tr><td>{{ apikey.keyid }}</td><td>{{ apikey.keypass }}</td><td>{{ apikey.hits }}</td><td><a class="btn btn-danger btn-xs" href="{{url_for('generic.del_apikey', id=apikey.id)}}">Remove</a></td></tr>
+      {% endfor %}
+      </table>
+    </div>
+</div>
+{% endblock %}

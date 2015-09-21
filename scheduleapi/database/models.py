@@ -192,6 +192,10 @@ class Apikey(Base, Mixin):
 
     UniqueConstraint('keyid')
 
+    def __init__(self, keyid, keypass):
+        self.keyid = keyid
+        self.keypass = keypass
+
     def __repr__(self):
         return '<Apikey %r>' % self.keyid
 
