@@ -4,7 +4,7 @@ import flask
 from flask import (
     Blueprint, render_template, abort, flash, session, request,
     redirect, url_for
-    )
+)
 from flask.ext.login import login_user, logout_user, login_required
 from jinja2 import TemplateNotFound
 
@@ -22,7 +22,8 @@ def login():
     form = LoginForm(request.form)
     if request.method == 'POST' and form.validate():
         session = get_session()
-        user = session.query(User).filter(User.username==form.username.data).first()
+        user = session.query(User).filter(
+            User.username == form.username.data).first()
         if user:
             if check_password(form.password.data, user.password):
                 user.authenticated = True
@@ -38,6 +39,7 @@ def login():
         abort(404)
 
 # Matte finns inte
+
 
 @bp.route('/register', methods=['GET', 'POST'])
 def register():

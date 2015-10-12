@@ -35,10 +35,11 @@ setup(
         'Flask-Babel',
         'Flask-WTF',
         'flask_restful',
+        'flask-debugtoolbar',
         'WTForms',
+        'wtforms_json',
         'PyYAML',
         'psycopg2',
         'passlib',
-        'urlparse',
     ]
 )
