@@ -26,7 +26,6 @@ setup(
         "License :: OSI Approved :: MIT License",
     ],
     install_requires=[
-        'flask',
         'Flask',
         'Flask-SQLAlchemy',
         'Flask-Security',
@@ -36,8 +35,8 @@ setup(
         'Flask-WTF',
         'flask_restful',
         'flask-debugtoolbar',
-        'WTForms',
-        'wtforms_json',
+        'WTForms==2.0.*',
+        'WTForms-JSON==0.2.*',
         'PyYAML',
         'psycopg2',
         'passlib',
