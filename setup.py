@@ -26,7 +26,7 @@ setup(
         "License :: OSI Approved :: MIT License",
     ],
     install_requires=[
-        'Flask',
+        'Flask==0.10.*',
         'Flask-SQLAlchemy',
         'Flask-Security',
         'Flask-Login',
