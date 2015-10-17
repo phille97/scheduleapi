@@ -40,7 +40,7 @@ def settings_yo():
         if save_settings(form):
             pass
     try:
-        return render_template('settings.html', form=form)
+        return render_template('forms/settings.html', form=form)
     except TemplateNotFound:
         abort(404)
 

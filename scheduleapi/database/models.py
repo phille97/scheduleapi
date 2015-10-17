@@ -13,13 +13,12 @@ from sqlalchemy.ext.declarative import declarative_base, declared_attr
 from flask.ext.security import RoleMixin, UserMixin
 from flask.ext.login import login_user, AnonymousUserMixin
 
+
 Base = declarative_base()
 
 ##
 # Mixins
 ##
-
-
 class Mixin(object):
 
     @declared_attr
@@ -30,44 +29,42 @@ class Mixin(object):
     created_at = Column(DateTime, default=datetime.datetime.utcnow)
     updated_at = Column(DateTime, onupdate=datetime.datetime.utcnow)
 
+
 ##
 # Relational tables
 ##
 users_roles = Table('users_roles', Base.metadata,
-                    Column('user_id', Integer, ForeignKey('user.id')),
-                    Column('role_id', Integer, ForeignKey('role.id'))
-                    )
+    Column('user_id', Integer, ForeignKey('user.id')),
+    Column('role_id', Integer, ForeignKey('role.id'))
+)
 users_groups = Table('users_groups', Base.metadata,
-                     Column('user_id', Integer, ForeignKey('user.id')),
-                     Column('group_id', Integer, ForeignKey('group.id'))
-                     )
+    Column('user_id', Integer, ForeignKey('user.id')),
+    Column('group_id', Integer, ForeignKey('group.id'))
+)
 users_calendars = Table('users_calendars', Base.metadata,
-                        Column('user_id', Integer, ForeignKey('user.id')),
-                        Column(
-                            'calendar_id', Integer, ForeignKey('calendar.id'))
-                        )
+    Column('user_id', Integer, ForeignKey('user.id')),
+    Column('calendar_id', Integer, ForeignKey('calendar.id'))
+)
 users_attatchments = Table('users_attatchments', Base.metadata,
-                           Column('user_id', Integer, ForeignKey('user.id')),
-                           Column(
-                               'attachment_id', Integer, ForeignKey('attachment.id'))
-                           )
+    Column('user_id', Integer, ForeignKey('user.id')),
+    Column('attachment_id', Integer, ForeignKey('attachment.id'))
+)
 groups_calendars = Table('groups_calendars', Base.metadata,
-                         Column('group_id', Integer, ForeignKey('group.id')),
-                         Column(
-                             'calendar_id', Integer, ForeignKey('calendar.id'))
-                         )
+    Column('group_id', Integer, ForeignKey('group.id')),
+    Column('calendar_id', Integer, ForeignKey('calendar.id'))
+)
 events_tags = Table('events_tags', Base.metadata,
-                    Column('event_id', Integer, ForeignKey('event.id')),
-                    Column('tag_id', Integer, ForeignKey('tag.id'))
-                    )
+    Column('event_id', Integer, ForeignKey('event.id')),
+    Column('tag_id', Integer, ForeignKey('tag.id'))
+)
 
 
 user_preference = Table('user_preference', Base.metadata,
-                        Column('pref_id', Integer, primary_key=True),
-                        Column('user_id', Integer, ForeignKey("user.id"), nullable=False),
-                        Column('pref_name', String(40), nullable=False),
-                        Column('pref_value', String(100))
-                        )
+    Column('pref_id', Integer, primary_key=True),
+    Column('user_id', Integer, ForeignKey("user.id"), nullable=False),
+    Column('pref_name', String(40), nullable=False),
+    Column('pref_value', String(100))
+)
 
 
 ##
@@ -128,10 +125,6 @@ class Calendar(Base, Mixin):
     description = Column(Text,  nullable=True)
     color = Column(String,  nullable=True)
 
-    users = relationship('User', secondary=users_calendars,
-                         backref=backref('calendar', lazy='dynamic'))
-    groups = relationship('Group', secondary=groups_calendars,
-                          backref=backref('calendar', lazy='dynamic'))
     events = relationship('Event', backref='calendar')
 
     def __init__(self, name=None, description=None, color=None):
@@ -218,9 +211,6 @@ class Attachment(Base, Mixin):
     size = Column(Integer, nullable=False)
     event_id = Column(Integer, ForeignKey('event.id'))
 
-    users = relationship('User', secondary=users_attatchments,
-                         backref=backref('attachment', lazy='dynamic'))
-
     UniqueConstraint('upload_path')
 
     def __repr__(self):
@@ -233,9 +223,6 @@ class Attachment(Base, Mixin):
 class Tag(Base, Mixin):
     name = Column(String, nullable=False)
     color = Column(String, nullable=True)
-
-    events = relationship('Event', secondary=events_tags,
-                          backref=backref('tag', lazy='dynamic'))
 
     def __repr__(self):
         return '<Tag %r>' % self.keyid
