@@ -32,6 +32,11 @@ def serve_aboutpage():
         abort(404)
 
 
+@bp.route('/ping')
+def serve_pong():
+    return "PONG", 200
+
+
 @bp.route('/settings', methods=['GET', 'POST'])
 @login_required
 def settings_yo():
@@ -61,7 +66,8 @@ def new_apikey():
     return redirect(url_for('generic.get_apikeys'))
 
 
-@bp.route('/settings/apikeys/<id>/remove', methods=['GET'])
+@bp.route('/settings/apikeys/<id>/delete', methods=['GET'])
+@bp.route('/settings/apikeys/<id>', methods=['DELETE'])
 @login_required
 def del_apikey(id):
     session = get_session()

@@ -67,12 +67,16 @@ def user_loader(user_id):
 
 @login_manager.request_loader
 def load_user_from_request(request):
-    api_key = request.headers.get('apikey')
-    api_pass = request.headers.get('apipass')
+    key = request.headers.get('apikey')
+    pwd = request.headers.get('apipass')
 
-    if api_key and api_pass:
-        return session.query(User).filter(Apikey.keyid == api_key)\
-                                  .filter(Apikey.keypass == api_pass).first()
+    if key and pwd:
+        apikey = session.query(Apikey).filter(Apikey.keyid == key)\
+                                      .filter(Apikey.keypass == pwd).first()
+        if apikey:
+            apikey.hits = apikey.hits + 1
+            session.commit()
+            return session.query(User).filter(User.id == apikey.user_id).first()
 
     return None
 
@@ -80,11 +84,6 @@ def load_user_from_request(request):
 # API schtuff
 api_bp = Blueprint('api', __name__, url_prefix='/api/v1')
 api_v1.init_app(api_bp)
-
-
-@api_bp.errorhandler(404)
-def route_not_found(e):
-    return jsonify('Fuck you')
 
 
 # Load and register blueprints
